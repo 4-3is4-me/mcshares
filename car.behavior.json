@@ -76,6 +76,198 @@
 				}
 			},
 			"minecraft:type_family": {
+				"family": ["car"]
+			},
+			"minecraft:breathable": {
+				"total_supply": 15,
+				"suffocate_time": 0
+			},
+			"minecraft:nameable": {},	
+			"minecraft:hurt_on_condition": {
+				"damage_conditions": [
+					{
+						"filters": {
+							"test": "in_lava",
+							"subject": "self",
+							"operator": "==",
+							"value": true
+						},
+						"cause": "lava",
+						"damage_per_tick": 4
+					}
+				]
+			},
+			"minecraft:movement": {
+				"value": 0.25
+			},
+			"minecraft:navigation.walk": {
+				"can_path_over_water": true,
+				"avoid_water": true,
+				"avoid_damage_blocks": true
+			},
+			"minecraft:movement.basic": {},
+			"minecraft:jump.static": {},
+			"minecraft:can_climb": {},
+			"minecraft:collision_box": {
+				"width": 0.9,
+				"height": 0.9
+			},
+			"minecraft:leashable": {
+				"soft_distance": 4,
+				"hard_distance": 6,
+				"max_distance": 10
+			},
+			"minecraft:balloonable": {
+				"mass": 0.75
+			},
+			"minecraft:despawn": {
+				"despawn_from_distance": {}
+			},
+			"minecraft:behavior.mount_pathing": {
+				"priority": 1,
+				"speed_multiplier": 1.25,
+				"target_dist": 0,
+				"track_target": true
+			},
+			"minecraft:behavior.float": {
+				"priority": 2
+			},
+			"minecraft:physics": {},
+			"minecraft:pushable": {
+				"is_pushable": false,
+				"is_pushable_by_piston": true
+			},
+			"minecraft:conditional_bandwidth_optimization": {}
+		},
+		"events": {
+			"become_zombie": {
+				"remove": {},
+				"add": {
+					"component_groups": ["minecraft:pig_transform"]
+				}
+			},
+			"minecraft:entity_spawned": {
+				"randomize": [
+					{
+						"weight": 95,
+						"trigger": "minecraft:spawn_adult"
+					},
+					{
+						"weight": 5,
+						"remove": {},
+						"add": {
+							"component_groups": ["minecraft:pig_baby"]
+						}
+					}
+				]
+			},
+			"minecraft:entity_born": {
+				"remove": {},
+				"add": {
+					"component_groups": ["minecraft:pig_baby"]
+				}
+			},
+			"minecraft:ageable_grow_up": {
+				"remove": {
+					"component_groups": ["minecraft:pig_baby"]
+				},
+				"add": {
+					"component_groups": ["minecraft:pig_adult", "minecraft:pig_saddled"]
+				}
+			},
+			"minecraft:on_saddled": {
+				"remove": {
+					"component_groups": ["minecraft:pig_unsaddled"]
+				},
+				"add": {
+					"component_groups": ["minecraft:pig_saddled"]
+				}
+			},
+			"minecraft:spawn_adult": {
+				"add": {
+					"component_groups": ["minecraft:pig_adult", "minecraft:pig_saddled"]
+				}
+			}
+		}
+	}
+}{
+	"format_version": "1.16.0",
+	"minecraft:entity": {
+		"description": {
+			"identifier": "my_ents:car",
+			"is_spawnable": false,
+			"is_summonable": true,
+			"is_experimental": false
+		},
+		"component_groups": {
+			"minecraft:pig_saddled": {
+				"minecraft:is_saddled": {},
+				"minecraft:loot": {
+					"table": "loot_tables/entities/pig_saddled.json"
+				},
+				"minecraft:boostable": {
+					"speed_multiplier": 6,
+					"duration": 3,
+					"boost_items": [
+						{
+							"item": "carrotOnAStick",
+							"damage": 2,
+							"replace_item": "fishing_rod"
+						}
+					]
+				},
+				"minecraft:rideable": {
+					"seat_count": 2,
+					"interact_text": "action.interact.mount",
+					"family_types": ["player"],
+					"seats": [
+						{
+						"min_rider_count": 0,
+              			"max_rider_count": 2,
+						"position": [0, 0.5, 0]
+						},
+						{
+						"min_rider_count": 1,
+              			"max_rider_count": 2,
+              			"position": [0, 0.5, -1]
+						}
+					]
+				}, 	
+				"minecraft:item_controllable": {
+					"control_items": "carrotOnAStick"
+				},
+				"minecraft:behavior.controlled_by_player": {
+					"priority": 0
+				},
+				"minecraft:inventory": {
+					
+					"inventory_size": 27,
+					"container_type": "minecart_chest"
+				  }
+			}
+		},
+		"components": {
+			"minecraft:damage_sensor": {
+				"triggers": {
+					"on_damage": {
+						"filters": [
+							{
+								"test": "is_family",
+								"subject": "other",
+								"value": "lightning"
+							},
+							{
+								"test": "is_difficulty",
+								"operator": "!=",
+								"value": "peaceful"
+							}
+						],
+						"event": "become_zombie"
+					},
+					"deals_damage": false
+				}
+			},
+			"minecraft:type_family": {
 				"family": ["pig", "mob"]
 			},
 			"minecraft:breathable": {
